@@ -1,18 +1,18 @@
 require('dotenv').config()
 
-if (process.env.LOGS_SECRET) {
-  require('now-logs')(process.env.LOGS_SECRET)
-}
-
 const axios = require('axios')
 const qs = require('qs')
 const scores = require('./lib/scores')
 const teams = require('./lib/teams')
 
-const { TOKEN, INTERVAL, TEAM } = process.env
+const { TOKEN, INTERVAL, TEAM, LOGS_SECRET } = process.env
 
 if (!teams.includes(TEAM)) {
   throw new Error(`process.env.TEAM must be one of ${teams.join(',')}`)
+}
+
+if (LOGS_SECRET) {
+  require('now-logs')(LOGS_SECRET)
 }
 
 const setStatus = (status, token) => axios({
