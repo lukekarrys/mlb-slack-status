@@ -1,0 +1,33 @@
+{
+  "name": "mlb-slack-status",
+  "description": "Update your Slack status with a baseball score.",
+  "version": "1.0.0",
+  "author": "Luke Karrys",
+  "dependencies": {
+    "axios": "0.16.1",
+    "dotenv": "4.0.0",
+    "lodash": "^4.17.4",
+    "now-logs": "0.0.7",
+    "qs": "6.4.0",
+    "scores": "^3.5.2"
+  },
+  "devDependencies": {
+    "now": "^4.11.1",
+    "standard": "^10.0.2"
+  },
+  "keywords": [
+    "baseball",
+    "mlb",
+    "slack"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "clean": "now rm --yes `now ls mlb-slack-status | grep '^ ' | awk '{print $1}'  | tail -n +2 | tr '\\n' ' '`",
+    "deploy": "now -e NODE_ENV=production -E .env",
+    "lint": "standard",
+    "start": "node index",
+    "validate": "npm ls"
+  }
+}
