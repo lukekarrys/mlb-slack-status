@@ -19,7 +19,7 @@ const setStatus = (status, token) => axios({
   method: 'post',
   url: `https://slack.com/api/users.profile.set?${qs.stringify({
     token,
-    profile: JSON.stringify({ status_text: status, status_emoji: `:${TEAM}:` })
+    profile: JSON.stringify({ status_text: status, status_emoji: `:${TEAM.toLowerCase()}:` })
   })}`
 })
 

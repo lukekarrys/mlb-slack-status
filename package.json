@@ -9,7 +9,7 @@
     "lodash": "^4.17.4",
     "now-logs": "0.0.7",
     "qs": "6.4.0",
-    "scores": "^3.5.2"
+    "scores": "^3.5.3"
   },
   "devDependencies": {
     "now": "^4.11.1",
