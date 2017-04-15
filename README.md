@@ -2,6 +2,8 @@
 
 Sync you Slack status with an MLB team.
 
+![go cubs](./screenshot.png)
+
 
 ## Use it!
 
@@ -16,4 +18,6 @@ Sync you Slack status with an MLB team.
 
 You should now have a server that gets the score for your team up to every 5 minutes and updates your Slack status with the current result.
 
-Note: if you redeploy it for some reason, make sure you teardown the old servers with `npm run clean`.
+*Bonus*: You should upload your team's logo as a custom emoji to Slack using the 3 letter team code!
+
+*Note*: if you redeploy it for some reason, make sure you teardown the old servers with `npm run clean`.
