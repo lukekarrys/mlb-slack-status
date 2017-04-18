@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+const { pick } = require('lodash')
 const axios = require('axios')
 const qs = require('qs')
 const ms = require('ms')
@@ -10,19 +11,32 @@ const Logger = require('./lib/logger')
 
 const logger = new Logger({ max: 100, logger: console })
 const { TOKEN, URL, INTERVAL, TEAM, EMOJI, TZ, DAY_OFFSET, DRY } = process.env
+const DEFAULT_EMOJI = 'baseball'
 
-const setStatus = (status) => {
-  const profile = { status_text: status, status_emoji: `:${EMOJI}:` }
+const setStatus = (status, emoji, { retry = false } = {}) => {
+  const profile = { status_text: status, status_emoji: `:${emoji}:` }
   const url = `https://slack.com/api/users.profile.set?${qs.stringify({token: TOKEN, profile: JSON.stringify(profile)})}`
 
-  const req = DRY
-    ? Promise.resolve()
-    : axios.post(url)
+  if (DRY) return Promise.resolve(profile)
 
-  return req.then(() => profile)
+  return axios.post(url).then(({ data }) => {
+    if (!data.ok) {
+      if (data.error === 'profile_status_set_failed_not_valid_emoji' && !retry) {
+        return setStatus(status, DEFAULT_EMOJI, { retry: true })
+      }
+
+      throw new Error(data.error)
+    }
+
+    return Object.assign(data, {
+      profile: pick(data.profile, 'status_text', 'status_emoji')
+    })
+  })
 }
 
 const start = () => {
+  let lastEvent = null
+
   const watcher = scores(
     TEAM,
     {
@@ -32,16 +46,23 @@ const start = () => {
       interval: INTERVAL,
       url: URL
     },
-    (err, status) => {
-      if (err) return logger.error(err)
-      setStatus(status)
-        .then((resp) => logger.log('[STATUS]', JSON.stringify(resp)))
-        .catch((err) => logger.error(err))
-    }
+    (err, status) => (err ? Promise.reject(err) : setStatus(status, EMOJI))
+      .then((resp) => (logger.log(JSON.stringify(resp)), resp)) // eslint-disable-line no-sequences
+      .catch((err) => (logger.error(err), err)) // eslint-disable-line no-sequences
+      .then((e) => (lastEvent = e))
   )
 
+  const send = (res, data) => {
+    const code = data instanceof Error ? 500 : 200
+    const resp = data instanceof Error ? `${data.message}\n${data.stack}` : data
+    const type = typeof resp === 'string' ? 'text/plain' : 'application/json'
+    res.setHeader('Content-Type', type)
+    micro.send(res, code, resp)
+  }
+
   const server = micro(router(
-    get('/', (req, res) => micro.send(res, 200, logger.toString()))
+    get('/', (req, res) => send(res, lastEvent || logger.toString())),
+    get('/logs', (req, res) => send(res, logger.toString()))
   ))
 
   watcher.start()
