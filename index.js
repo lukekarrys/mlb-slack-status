@@ -28,9 +28,10 @@ const setStatus = (status, emoji, { retry = false } = {}) => {
       throw new Error(data.error)
     }
 
-    return Object.assign(data, {
+    return {
+      ok: data.ok,
       profile: pick(data.profile, 'status_text', 'status_emoji')
-    })
+    }
   })
 }
 

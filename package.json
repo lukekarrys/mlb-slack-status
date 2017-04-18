@@ -14,6 +14,7 @@
     "scores": "^3.5.3"
   },
   "devDependencies": {
+    "git-validate": "^2.2.2",
     "now": "^4.11.1",
     "standard": "^10.0.2"
   },
@@ -24,6 +25,10 @@
   ],
   "license": "MIT",
   "main": "index.js",
+  "pre-commit": [
+    "lint",
+    "validate"
+  ],
   "private": true,
   "scripts": {
     "clean": "now rm --yes `now ls mlb-slack-status | grep '^ ' | awk '{print $1}'  | tail -n +2 | tr '\\n' ' '`",
