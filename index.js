@@ -57,7 +57,7 @@ const start = () => {
     const code = data instanceof Error ? 500 : 200
     const resp = data instanceof Error ? `${data.message}\n${data.stack}` : data
     const type = typeof resp === 'string' ? 'text/plain' : 'application/json'
-    res.setHeader('Content-Type', type)
+    res.setHeader('Content-Type', `${type}; charset=utf-8`)
     micro.send(res, code, resp)
   }
 
