@@ -10,7 +10,7 @@ const scores = require('./lib/scores')
 const Logger = require('./lib/logger')
 
 const logger = new Logger({ max: 100, logger: console })
-const { TOKEN, URL, INTERVAL, TEAM, EMOJI, TZ, DAY_OFFSET, DRY } = process.env
+const { TOKEN, URL, INTERVAL, TEAM, EMOJI, TZ, DAY_OFFSET, DRY, PORT = 3005 } = process.env
 const DEFAULT_EMOJI = 'baseball'
 
 const setStatus = (status, emoji, { retry = false } = {}) => {
@@ -67,7 +67,7 @@ const start = () => {
   ))
 
   watcher.start()
-  server.listen(3000)
+  server.listen(PORT)
 }
 
 start()
