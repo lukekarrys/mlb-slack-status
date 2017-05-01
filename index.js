@@ -9,7 +9,6 @@ const { router, get } = require('microrouter')
 const scores = require('./lib/scores')
 const Logger = require('./lib/logger')
 
-const logger = new Logger({ max: 100, logger: console })
 const { TOKEN, URL, INTERVAL, TEAM, EMOJI, TZ, DAY_OFFSET, DRY, PORT = 3005 } = process.env
 const DEFAULT_EMOJI = 'baseball'
 
@@ -35,8 +34,9 @@ const setStatus = (status, emoji, { retry = false } = {}) => {
   })
 }
 
-const start = () => {
+const start = ({ nullLogger } = {}) => {
   let lastEvent = null
+  const logger = new Logger({ max: 100, logger: nullLogger ? null : void 0 })
 
   const watcher = scores(
     TEAM,
@@ -68,6 +68,18 @@ const start = () => {
 
   watcher.start()
   server.listen(PORT)
+
+  return {
+    get: () => ({ logs: logger.logs(), last: lastEvent }),
+    close: () => {
+      watcher.stop()
+      server.close()
+    }
+  }
 }
 
-start()
+if (require.main === module) {
+  start()
+} else {
+  module.exports = start
+}

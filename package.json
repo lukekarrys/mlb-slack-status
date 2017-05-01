@@ -8,15 +8,19 @@
     "dotenv": "4.0.0",
     "lodash": "^4.17.4",
     "micro": "^7.3.2",
-    "microrouter": "^2.0.2",
+    "microrouter": "^2.1.0",
     "ms": "^1.0.0",
     "qs": "6.4.0",
-    "scores": "^3.5.3"
+    "scores": "^3.5.4"
   },
   "devDependencies": {
     "git-validate": "^2.2.2",
-    "now": "^4.11.1",
-    "standard": "^10.0.2"
+    "mockdate": "^2.0.1",
+    "nock": "^9.0.13",
+    "now": "^5.0.0",
+    "now-purge": "0.0.13",
+    "standard": "^10.0.2",
+    "tape": "^4.6.3"
   },
   "keywords": [
     "baseball",
@@ -31,10 +35,11 @@
   ],
   "private": true,
   "scripts": {
-    "clean": "now rm --yes `now ls mlb-slack-status | grep '^ ' | awk '{print $1}'  | tail -n +2 | tr '\\n' ' '`",
+    "clean": "now-purge",
     "deploy": "now -e NODE_ENV=production -E .env",
     "lint": "standard",
     "start": "node index",
+    "test": "tape test/index.js",
     "validate": "npm ls"
   }
 }
