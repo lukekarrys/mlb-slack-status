@@ -2,6 +2,9 @@
 
 Sync you Slack status with an MLB team.
 
+[![Build Status](https://travis-ci.org/lukekarrys/mlb-slack-status.png?branch=master)](https://travis-ci.org/lukekarrys/mlb-slack-status)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+
 ![go cubs](./screenshot.png)
 
 
