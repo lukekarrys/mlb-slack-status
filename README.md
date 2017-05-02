@@ -1,5 +1,7 @@
 # mlb-slack-status
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/lukekarrys/mlb-slack-status.svg)](https://greenkeeper.io/)
+
 Sync you Slack status with an MLB team.
 
 [![Build Status](https://travis-ci.org/lukekarrys/mlb-slack-status.png?branch=master)](https://travis-ci.org/lukekarrys/mlb-slack-status)
