@@ -1,10 +1,9 @@
 # mlb-slack-status
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/lukekarrys/mlb-slack-status.svg)](https://greenkeeper.io/)
-
 Sync you Slack status with an MLB team.
 
 [![Build Status](https://travis-ci.org/lukekarrys/mlb-slack-status.png?branch=master)](https://travis-ci.org/lukekarrys/mlb-slack-status)
+[![Greenkeeper badge](https://badges.greenkeeper.io/lukekarrys/mlb-slack-status.svg)](https://greenkeeper.io/)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 ![go cubs](./screenshot.png)
