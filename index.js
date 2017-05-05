@@ -37,15 +37,15 @@ const start = (options) => {
   const {
     token,
     url,
-    interval,
     team,
-    emoji,
-    tz,
-    dayOffset,
+    emoji = DEFAULT_EMOJI,
+    interval = '5m',
+    tz = 'America/Los_Angeles',
+    dayOffset = '3h',
     port = 3005,
     nullLogger = false
   } = assign(
-    camelCaseKeys(pick(process.env, ['TOKEN', 'URL', 'INTERVAL', 'TEAM', 'EMOJI', 'TZ', 'DAY_OFFSET', 'PORT'])),
+    camelCaseKeys(pick(process.env, ['TOKEN', 'URL', 'TEAM', 'EMOJI', 'INTERVAL', 'TZ', 'DAY_OFFSET', 'PORT'])),
     options
   )
 
