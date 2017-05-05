@@ -19,7 +19,7 @@ cp .env.example .env
 ```
 
 1. Acquire a Slack token. You could setup a [Slack app](https://api.slack.com/docs/oauth) with a [`users.profile:write` scope](https://api.slack.com/methods/users.profile.set) (takes some work) or use a [legacy token](https://api.slack.com/custom-integrations/legacy-tokens) (not so much work)
-1. Edit `.env` with your `TOKEN` and favorite [`TEAM`](./lib/teams.js)
+1. Edit `.env` with your `TOKEN` and other variables (like `TEAM`)
 1. __Bonus:__ upload your team's logo as an emoji in Slack and set it as `EMOJI` in `.env`
 1. `npm run deploy && npm run clean` (the `clean` part will remove any old deploys)
 
@@ -32,11 +32,11 @@ You should now have a server that updates your Slack status to your team's curre
 
   If a game is scheduled for that day it will set your status to the time of the game. The server will then sleep until the start of the game before attempting to update your status again.
 
-- **In progress**: `CHC – 1-0 Top 4th vs PIT`
+- **In progress**: `CHC – 1-0 Top 4th 1 out vs PIT`
 
   If a game is in progress it will set your status to the current result of the game. It will check on a [set interval](./.env.example#L4) until the game is complete.
 
-- **Completed**: `CHC – L 1-6 vs PIT`
+- **Completed**: `CHC – L 1-6 F/11 vs PIT`
 
   Once the game is completed it will set your status the the final result of the game. The server will then sleep until [the next day](./.env.example#L5-L6) before trying to find the next game.
 

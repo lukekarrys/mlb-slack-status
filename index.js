@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const { pick } = require('lodash')
+const { pick, assign, transform, camelCase } = require('lodash')
 const axios = require('axios')
 const qs = require('qs')
 const ms = require('ms')
@@ -9,19 +9,18 @@ const { router, get } = require('microrouter')
 const scores = require('./lib/scores')
 const Logger = require('./lib/logger')
 
-const { TOKEN, URL, INTERVAL, TEAM, EMOJI, TZ, DAY_OFFSET, DRY, PORT = 3005 } = process.env
 const DEFAULT_EMOJI = 'baseball'
 
-const setStatus = (status, emoji, { retry = false } = {}) => {
-  const profile = { status_text: status, status_emoji: `:${emoji}:` }
-  const url = `https://slack.com/api/users.profile.set?${qs.stringify({token: TOKEN, profile: JSON.stringify(profile)})}`
+const camelCaseKeys = (obj) => transform(obj, (res, value, key) => (res[camelCase(key)] = value), {})
 
-  if (DRY) return Promise.resolve(profile)
+const setStatus = ({ status, emoji, token }, { retry = false } = {}) => {
+  const profile = { status_text: status, status_emoji: `:${emoji}:` }
+  const url = `https://slack.com/api/users.profile.set?${qs.stringify({token, profile: JSON.stringify(profile)})}`
 
   return axios.post(url).then(({ data }) => {
     if (!data.ok) {
       if (data.error === 'profile_status_set_failed_not_valid_emoji' && !retry) {
-        return setStatus(status, DEFAULT_EMOJI, { retry: true })
+        return setStatus({ status, token, emoji: DEFAULT_EMOJI }, { retry: true })
       }
 
       throw new Error(data.error)
@@ -34,20 +33,35 @@ const setStatus = (status, emoji, { retry = false } = {}) => {
   })
 }
 
-const start = ({ nullLogger } = {}) => {
+const start = (options) => {
+  const {
+    token,
+    url,
+    interval,
+    team,
+    emoji,
+    tz,
+    dayOffset,
+    port = 3005,
+    nullLogger = false
+  } = assign(
+    camelCaseKeys(pick(process.env, ['TOKEN', 'URL', 'INTERVAL', 'TEAM', 'EMOJI', 'TZ', 'DAY_OFFSET', 'PORT'])),
+    options
+  )
+
   let lastEvent = null
   const logger = new Logger({ max: 100, logger: nullLogger ? null : void 0 })
 
   const watcher = scores(
-    TEAM,
+    team,
     {
       logger,
-      timezone: TZ,
-      dailyCutoff: Math.round(ms(DAY_OFFSET) / 1000 / 60), // minutes
-      interval: INTERVAL,
-      url: URL
+      url,
+      interval,
+      timezone: tz,
+      dailyCutoff: Math.round(ms(dayOffset) / 1000 / 60) // minutes
     },
-    (err, status) => (err ? Promise.reject(err) : setStatus(status, EMOJI))
+    (err, status) => (err ? Promise.reject(err) : setStatus({ status, emoji, token }))
       .then((resp) => (logger.log(JSON.stringify(resp)), resp)) // eslint-disable-line no-sequences
       .catch((err) => (logger.error(err), err)) // eslint-disable-line no-sequences
       .then((e) => (lastEvent = e))
@@ -67,7 +81,7 @@ const start = ({ nullLogger } = {}) => {
   ))
 
   watcher.start()
-  server.listen(PORT)
+  server.listen(port)
 
   return {
     get: () => ({ logs: logger.logs(), last: lastEvent }),
