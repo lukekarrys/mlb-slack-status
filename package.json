@@ -4,13 +4,13 @@
   "version": "1.0.0",
   "author": "Luke Karrys",
   "dependencies": {
-    "axios": "0.16.2",
-    "dotenv": "4.0.0",
+    "axios": "^0.16.2",
+    "dotenv": "^4.0.0",
     "lodash": "^4.17.4",
     "micro": "^7.3.2",
     "microrouter": "^2.1.0",
     "ms": "^2.0.0",
-    "qs": "6.4.0",
+    "qs": "^6.4.0",
     "scores": "^3.5.4"
   },
   "devDependencies": {
