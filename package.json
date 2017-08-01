@@ -4,21 +4,21 @@
   "version": "1.0.0",
   "author": "Luke Karrys",
   "dependencies": {
-    "axios": "0.16.1",
-    "dotenv": "4.0.0",
+    "axios": "^0.16.2",
+    "dotenv": "^4.0.0",
     "lodash": "^4.17.4",
     "micro": "^7.3.2",
     "microrouter": "^2.1.0",
     "ms": "^2.0.0",
-    "qs": "6.4.0",
+    "qs": "^6.4.0",
     "scores": "^3.5.4"
   },
   "devDependencies": {
     "git-validate": "^2.2.2",
     "mockdate": "^2.0.1",
     "nock": "^9.0.13",
-    "now": "^6.0.0",
-    "now-purge": "0.0.13",
+    "now": "^7.0.0",
+    "now-purge": "0.0.14",
     "standard": "^10.0.2",
     "tape": "^4.6.3"
   },
