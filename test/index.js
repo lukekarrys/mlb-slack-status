@@ -1,7 +1,3 @@
-// const fs = require('fs')
-// const dotenv = require('dotenv')
-// const path = require('path')
-// const { each } = require('lodash')
 const test = require('tape')
 const MockDate = require('mockdate')
 const nock = require('nock')
